@@ -58,7 +58,8 @@ app.use(apiRouter.routes(), apiRouter.allowedMethods());
 
 // error-handling
 app.on('error', (err, ctx) => {
-  console.error('server error', err, ctx);
+  logUtil.logError(ctx, err, new Date());
+  // console.error('server error', err, ctx);
 });
 
 module.exports = app;
