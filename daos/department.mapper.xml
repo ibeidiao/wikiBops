@@ -1,0 +1,8 @@
+<root>
+  <map id="getDepartment">
+    select * from Department
+    <where>
+      id = #{id}
+    </where>
+  </map>
+</root>

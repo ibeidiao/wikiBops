@@ -1,0 +1,10 @@
+{
+  "ignore": [
+    ".git",
+    "node_modules/",
+    "views/",
+    "logs/"
+  ],
+  "verbose": true,
+  "ext": "js json xml"
+}
