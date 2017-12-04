@@ -57,7 +57,7 @@ function formatRes(ctx, resTime) {
   logText += `response body: \n${JSON.stringify(ctx.body)}\n`;
 
   // 响应日志结束
-  logText += '*************** response log end ***************' + '\n';
+  logText += '*************** response log end ***************\n';
 
   return logText;
 }
