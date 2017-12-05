@@ -1,13 +1,12 @@
 const DepartmentDao = require('../daos/department.dao');
 
-exports.getDepartment = async (ctx, next) => {
+exports.getDepartment = async (ctx) => {
   try {
-    let content;
-    content = await DepartmentDao.getDepartment({id: 10000});
+    const content = await DepartmentDao.getDepartment({ id: 10000 });
     ctx.body = {
-      content
-    }
+      content,
+    };
   } catch (err) {
     console.log(err);
   }
-}
+};

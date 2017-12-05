@@ -4,6 +4,8 @@ const json = require('koa-json');
 const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
+
+const auth = require('./utils/auth');
 const logUtil = require('./utils/logUtil');
 
 const apiRouter = require('./routes/api');
@@ -52,6 +54,9 @@ app.use(async (ctx, next) => {
     logUtil.logError(ctx, error, ms);
   }
 });
+
+// auth
+app.use(auth);
 
 // routes
 app.use(apiRouter.routes(), apiRouter.allowedMethods());

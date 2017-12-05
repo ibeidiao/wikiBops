@@ -8,7 +8,7 @@
     "prd": "pm2 start bin/www",
     "precommit": "npm run lint",
     "prepush": "npm run lint",
-    "lint": "./node_modules/eslint/bin/eslint.js app.js utils/**/*.js dao/*.js routes/*.js public/javascripts/*.js --fix",
+    "lint": "./node_modules/eslint/bin/eslint.js app.js controllers/*.js utils/**/*.js dao/*.js routes/*.js public/javascripts/*.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
