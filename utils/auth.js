@@ -77,8 +77,7 @@ async function hasAuth(allNeedAuth, ctx) {
 
 async function auth(ctx, next) {
   const isAllowed = await hasAuth(getNeedAuth(ctx.path), ctx);
-  if (isAllowed) { return next(); }
-  return undefined;
+  if (isAllowed) { next(); }
 }
 
 module.exports = auth;
