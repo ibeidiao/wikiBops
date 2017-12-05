@@ -81,4 +81,3 @@ async function auth(ctx, next) {
 }
 
 module.exports = auth;
-

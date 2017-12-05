@@ -8,8 +8,9 @@
     "prd": "pm2 start bin/www",
     "precommit": "npm run lint",
     "prepush": "npm run lint",
-    "lint": "./node_modules/eslint/bin/eslint.js app.js controllers/*.js utils/**/*.js dao/*.js routes/*.js public/javascripts/*.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "./node_modules/eslint/bin/eslint.js app.js test/*.js controllers/*.js utils/**/*.js dao/*.js routes/*.js public/javascripts/*.js",
+    "test": "mocha test/*.test.js -w",
+    "clean-log": "rm -rf logs/**/*.log "
   },
   "dependencies": {
     "async": "^2.6.0",
@@ -30,10 +31,12 @@
     "xmldom": "^0.1.27"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
     "eslint": "^4.12.1",
     "eslint-config-airbnb-base": "^12.1.0",
     "eslint-plugin-import": "^2.8.0",
     "husky": "^0.14.3",
+    "mocha": "^4.0.1",
     "nodemon": "^1.8.1"
   }
 }
