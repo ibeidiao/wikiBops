@@ -1,5 +1,5 @@
 
-const DepartmentDao = require('../daos/department.dao');
+// const DepartmentDao = require('../daos/department.dao');
 
 function commonAuth() {
   return new Promise((resolve) => {
@@ -9,32 +9,32 @@ function commonAuth() {
   });
 }
 
-function specialAuth(ctx) {
-  ctx.body = {
-    message: 'specialAuth权限不足',
-  };
-  return false;
+function specialAuth() {
+  // ctx.body = {
+  //   message: 'specialAuth权限不足',
+  // };
+  return true;
 }
 
-function isExistAuth(ctx) {
-  return new Promise(async (resolve) => {
-    const content = await DepartmentDao.getDepartment({ id: 10000 });
-    if (content.length && content.length > 0) {
-      resolve(true);
-    } else {
-      ctx.body = {
-        message: 'isExistAuth权限不足',
-      };
-      resolve(false);
-    }
-  });
-}
+// function isExistAuth(ctx) {
+//   return new Promise(async (resolve) => {
+//     const content = await DepartmentDao.getDepartment({ id: 10000 });
+//     if (content.length && content.length > 0) {
+//       resolve(true);
+//     } else {
+//       ctx.body = {
+//         message: 'isExistAuth权限不足',
+//       };
+//       resolve(false);
+//     }
+//   });
+// }
 
 const cache = {};
 
 const authUrls = [
   { reg: /.*/, needAuth: [commonAuth] },
-  { reg: /\/api\//, needAuth: [commonAuth, specialAuth, isExistAuth] },
+  { reg: /\/api\//, needAuth: [commonAuth, specialAuth] },
 ];
 
 /**
@@ -77,7 +77,7 @@ async function hasAuth(allNeedAuth, ctx) {
 
 async function auth(ctx, next) {
   const isAllowed = await hasAuth(getNeedAuth(ctx.path), ctx);
-  if (isAllowed) { next(); }
+  if (isAllowed) { await next(); }
 }
 
 module.exports = auth;

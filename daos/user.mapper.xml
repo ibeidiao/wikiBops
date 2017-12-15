@@ -1,0 +1,69 @@
+<root>
+  <map id="addUser">
+    insert into User 
+    (loginName, password, nickName, createTime, modifyTime, creatorId) 
+      values 
+    (#{loginName},#{password},#{nickName},#{createTime}, #{modifyTime}, #{creatorId})
+  </map>
+  <map id="getUserList">
+    select 
+    a.id, 
+    a.loginName as loginName, 
+    a.nickName as nickName, 
+    a.email as email, 
+    a.mobile as mobile, 
+    a.gender as gender, 
+    a.role as role, 
+    a.`status` as status, 
+    a.createTime as createTime, 
+    a.modifyTime as modifyTime, 
+    a.creatorId as creatorId,
+    b.nickName as creatorName from wiki.User a, wiki.User b 
+    <where>
+      a.creatorId = b.id
+      <if test="@notEmpty(this.filter)">
+        and (a.loginName = #{filter} or a.nickName = #{filter} or a.email = #{filter} or a.mobile = #{filter})
+      </if>
+    </where>
+    limit #{offset},#{pageSize}
+  </map>
+  <map id="getUserList-C">
+    select count(*) as count from wiki.User a, wiki.User b 
+    <where>
+      a.creatorId = b.id
+      <if test="@notEmpty(this.filter)">
+        and (a.loginName = #{filter} or a.nickName = #{filter} or a.email = #{filter} or a.mobile = #{filter})
+      </if>
+    </where>
+  </map>
+  <map id="updateUser">
+    update User
+    <set>
+      modifyTime = #{modifyTime}
+      <if test="@notEmpty(this.password)">
+        , password = #{password}
+      </if>
+      <if test="@notEmpty(this.email)">
+        , email = #{email}
+      </if>
+      <if test="@notEmpty(this.mobile)">
+        , mobile = #{mobile}
+      </if>
+      <if test="@notEmpty(this.gender)">
+        , gender = #{gender}
+      </if>
+      <if test="@notEmpty(this.nickName)">
+        , nickName = #{nickName}
+      </if>
+      <if test="@notEmpty(this.role)">
+        , role = #{role}
+      </if>
+      <if test="@notEmpty(this.status)">
+        , status = #{status}
+      </if>
+    </set>
+    <where>
+      id = #{id}
+    </where>
+  </map>
+</root>
