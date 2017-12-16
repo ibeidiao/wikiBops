@@ -26,6 +26,7 @@
     "koa-router": "^7.1.1",
     "koa-static": "^3.0.0",
     "koa-views": "^5.2.1",
+    "koa2-cors": "^2.0.5",
     "log4js": "^2.3.12",
     "mysql": "^2.15.0",
     "pug": "^2.0.0-rc.1",

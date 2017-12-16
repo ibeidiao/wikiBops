@@ -6,6 +6,7 @@ const {
   resetPwd,
   getUserList,
   setStatus,
+  checkLoginNameUnique,
 } = require('../controllers/user.controller');
 
 router.prefix('/user');
@@ -19,5 +20,7 @@ router.post('/resetPwd', resetPwd);
 router.post('/getUserList', getUserList);
 
 router.post('/setStatus', setStatus);
+
+router.post('/checkLoginNameUnique', checkLoginNameUnique);
 
 module.exports = router;

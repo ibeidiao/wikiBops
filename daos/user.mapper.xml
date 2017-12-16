@@ -24,6 +24,15 @@
       <if test="@notEmpty(this.filter)">
         and (a.loginName = #{filter} or a.nickName = #{filter} or a.email = #{filter} or a.mobile = #{filter})
       </if>
+      <if test="@notEmpty(this.id)">
+        and a.id = #{id}
+      </if>
+      <if test="@notEmpty(this.loginName)">
+        and a.loginName = #{loginName}
+      </if>
+      <if test="@notEmpty(this.nickName)">
+        and a.nickName = #{nickName}
+      </if>
     </where>
     limit #{offset},#{pageSize}
   </map>
@@ -33,6 +42,15 @@
       a.creatorId = b.id
       <if test="@notEmpty(this.filter)">
         and (a.loginName = #{filter} or a.nickName = #{filter} or a.email = #{filter} or a.mobile = #{filter})
+      </if>
+      <if test="@notEmpty(this.id)">
+        and a.id = #{id}
+      </if>
+      <if test="@notEmpty(this.loginName)">
+        and a.loginName = #{loginName}
+      </if>
+      <if test="@notEmpty(this.nickName)">
+        and a.nickName = #{nickName}
       </if>
     </where>
   </map>

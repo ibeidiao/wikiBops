@@ -4,6 +4,7 @@ const json = require('koa-json');
 const onerror = require('koa-onerror');
 const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
+const cors = require('koa2-cors');
 
 const auth = require('./utils/auth');
 const logUtil = require('./utils/logUtil');
@@ -26,6 +27,23 @@ app.use(require('koa-static')(`${__dirname}/public`));
 app.use(views(`${__dirname}/views`, {
   extension: 'pug',
 }));
+
+app.use(cors({
+  origin() {
+    return '*';
+  },
+  allowMethods: ['GET', 'POST', 'DELETE', 'OPTIONS', 'PUT'],
+}));
+
+// app.use(async function(ctx, next) {
+//   console.log(222);
+//   ctx.set("Access-Control-Allow-Origin", '*')
+//   ctx.set("Access-Control-Allow-Credentials", true);
+//   ctx.set("Access-Control-Max-Age", 86400000);
+//   ctx.set("Access-Control-Allow-Methods", "OPTIONS, GET, PUT, POST, DELETE");
+//   ctx.set("Access-Control-Allow-Headers", "x-requested-with, accept, origin, content-type");
+//   await next()
+// })
 
 // // logger
 // app.use(async (ctx, next) => {
