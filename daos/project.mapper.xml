@@ -1,0 +1,80 @@
+<root>
+  <map id="addProject">
+    insert into Project 
+    (name, description, creatorId, ownerId, updaterId, createTime, modifyTime) 
+      values 
+    (#{name},#{description},#{creatorId},#{ownerId}, #{updaterId}, #{createTime}, #{modifyTime})
+  </map>
+  <map id="addProjectUserRelation">
+    insert into ProjectUserRelation
+    (projectId, userId, type, createTime, modifyTime)
+      values
+    (#{projectId}, #{userId}, #{type}, #{createTime}, #{modifyTime})
+  </map>
+  <map id="getProjectList">
+    select 
+    a.id, 
+    a.name as name, 
+    a.description as description, 
+    a.creatorId as creatorId, 
+    a.ownerId as ownerId, 
+    c.nickName as ownerName, 
+    a.updaterId as updaterId, 
+    d.nickName as updaterName, 
+    a.createTime as createTime, 
+    a.modifyTime as modifyTime,
+    b.type as type from Project a, ProjectUserRelation b, User c, User d
+    <where>
+      b.projectId = a.id and c.id = a.ownerId and d.id = a.updaterId and b.userId = #{userId}
+      <if test="@notEmpty(this.filter)">
+        and (a.name = #{filter} or c.nickName = #{filter})
+      </if>
+      <if test="@notEmpty(this.ownerId)">
+        and a.ownerId = #{ownerId}
+      </if>
+    </where>
+    limit #{offset},#{pageSize}
+  </map>
+  <map id="getProjectList-C">
+    select count(*) as count from Project a, ProjectUserRelation b, User c, User d
+    <where>
+      b.projectId = a.id and c.id = a.ownerId and d.id = a.updaterId and b.userId = #{userId}
+      <if test="@notEmpty(this.filter)">
+        and (a.name = #{filter} or c.nickName = #{filter})
+      </if>
+      <if test="@notEmpty(this.ownerId)">
+        and a.ownerId = #{ownerId}
+      </if>
+    </where>
+  </map>
+  <map id="updateUser">
+    update User
+    <set>
+      modifyTime = #{modifyTime}
+      <if test="@notEmpty(this.password)">
+        , password = #{password}
+      </if>
+      <if test="@notEmpty(this.email)">
+        , email = #{email}
+      </if>
+      <if test="@notEmpty(this.mobile)">
+        , mobile = #{mobile}
+      </if>
+      <if test="@notEmpty(this.gender)">
+        , gender = #{gender}
+      </if>
+      <if test="@notEmpty(this.nickName)">
+        , nickName = #{nickName}
+      </if>
+      <if test="@notEmpty(this.role)">
+        , role = #{role}
+      </if>
+      <if test="@notEmpty(this.status)">
+        , status = #{status}
+      </if>
+    </set>
+    <where>
+      id = #{id}
+    </where>
+  </map>
+</root>

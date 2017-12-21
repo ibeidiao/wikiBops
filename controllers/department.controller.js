@@ -7,6 +7,6 @@ exports.getDepartment = async (ctx) => {
       content,
     };
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 };
