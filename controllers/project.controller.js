@@ -45,3 +45,108 @@ exports.getProjectList = async (ctx) => {
     };
   }
 };
+
+exports.getProjectDetail = async (ctx) => {
+  const { id } = ctx.request.body;
+  try {
+    const res = await ProjectDao.getProjectDetail({ id });
+    const resBody = new ResponseBody(res, '获取项目详情信息成功');
+    ctx.body = resBody;
+  } catch (err) {
+    ctx.body = {
+      err,
+    };
+  }
+};
+
+exports.addProjectUserRelation = async (ctx) => {
+  const { projectId, userId, type } = ctx.request.body;
+  const now = formatDate(new Date());
+  const relation = {
+    projectId,
+    userId,
+    type,
+    createTime: now,
+    modifyTime: now,
+  };
+  try {
+    const res = await ProjectDao.addProjectUserRelation(relation);
+    const resBody = new ResponseBody({ insertId: res.insertId }, '添加成员成功');
+    ctx.body = resBody;
+  } catch (err) {
+    ctx.body = {
+      err,
+    };
+  }
+};
+
+exports.removeProjectUserRelation = async (ctx) => {
+  const { id } = ctx.request.body;
+  const now = formatDate(new Date());
+  const relation = {
+    id,
+    status: 1,
+    modifyTime: now,
+  };
+  try {
+    await ProjectDao.updateProjectUserRelation(relation);
+    const resBody = new ResponseBody({}, '删除成员成功');
+    ctx.body = resBody;
+  } catch (err) {
+    ctx.body = {
+      err,
+    };
+  }
+};
+
+exports.makeOverProject = async (ctx) => {
+  const { projectId, relationId } = ctx.request.body;
+  const now = formatDate(new Date());
+  const relation = {
+    projectId,
+    relationId,
+    modifyTime: now,
+    type: 1,
+  };
+  try {
+    await ProjectDao.makeOverProject(relation);
+    const resBody = new ResponseBody({}, '项目转让成功');
+    ctx.body = resBody;
+  } catch (err) {
+    ctx.body = {
+      err,
+    };
+  }
+};
+
+exports.setStatus = async (ctx) => {
+  const { status, id } = ctx.request.body;
+  const now = formatDate(new Date());
+  const project = { status, id, modifyTime: now };
+  try {
+    await ProjectDao.updateProject(project);
+    const resBody = new ResponseBody({}, '设置项目状态成功');
+    ctx.body = resBody;
+  } catch (err) {
+    ctx.body = {
+      err,
+    };
+  }
+};
+
+exports.editProject = async (ctx) => {
+  const { id, name, description } = ctx.request.body;
+  const now = formatDate(new Date());
+  const project = {
+    id, name, description, modifyTime: now,
+  };
+  try {
+    await ProjectDao.updateProject(project);
+    const resBody = new ResponseBody({}, '更新项目状态成功');
+    ctx.body = resBody;
+  } catch (err) {
+    ctx.body = {
+      err,
+    };
+  }
+};

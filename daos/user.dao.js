@@ -35,9 +35,17 @@ const getUserListCount = async (user) => {
   return res[0];
 }
 
+const getUserOptions = async (user) => {
+  const sql = userMapper('getUserOptions', user);
+  const res = await connection.query(sql);
+
+  return Object.assign({}, { options: res });
+}
+
 module.exports = {
   addUser,
   updateUser,
   getUserList,
   getUserListCount,
+  getUserOptions,
 }

@@ -84,4 +84,13 @@
       id = #{id}
     </where>
   </map>
+  <map id="getUserOptions">
+    select id, loginName, nickName from User
+    <where>
+      1 = 1
+      <if test="@notEmpty(this.filter)">
+        and ( loginName LIKE #{filter} or nickName LIKE #{filter} )
+      </if>
+    </where>
+  </map>
 </root>

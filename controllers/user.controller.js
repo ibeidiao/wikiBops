@@ -98,3 +98,17 @@ exports.checkLoginNameUnique = async (ctx) => {
     };
   }
 };
+
+exports.getUserOptions = async (ctx) => {
+  const { filter } = ctx.request.body;
+  const user = { filter: filter ? `%${filter}%` : filter };
+  try {
+    const res = await UserDao.getUserOptions(user);
+    const resBody = new ResponseBody(res, '获取匹配的用户');
+    ctx.body = resBody;
+  } catch (err) {
+    ctx.body = {
+      err,
+    };
+  }
+};

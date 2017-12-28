@@ -47,34 +47,67 @@
       </if>
     </where>
   </map>
-  <map id="updateUser">
-    update User
+  <map id="updateProject">
+    update Project
     <set>
       modifyTime = #{modifyTime}
-      <if test="@notEmpty(this.password)">
-        , password = #{password}
-      </if>
-      <if test="@notEmpty(this.email)">
-        , email = #{email}
-      </if>
-      <if test="@notEmpty(this.mobile)">
-        , mobile = #{mobile}
-      </if>
-      <if test="@notEmpty(this.gender)">
-        , gender = #{gender}
-      </if>
-      <if test="@notEmpty(this.nickName)">
-        , nickName = #{nickName}
-      </if>
-      <if test="@notEmpty(this.role)">
-        , role = #{role}
+      <if test="@notEmpty(this.name)">
+        , name = #{name}
       </if>
       <if test="@notEmpty(this.status)">
         , status = #{status}
+      </if>
+      <if test="@notEmpty(this.description)">
+        , description = #{description}
       </if>
     </set>
     <where>
       id = #{id}
     </where>
+  </map>
+  <map id="getProjectInfo">
+    select 
+    a.id as id,
+    a.name as name,
+    a.description as description,
+    a.creatorId as creatorId,
+    b.nickName as creatorName,
+    a.ownerId as ownerId,
+    c.nickName as ownerName,
+    a.createTime as createTime,
+    a.modifyTime as modifyTime,
+    a.status as status from Project a, User b, User c
+    where a.creatorId = b.id and a.ownerId = c.id and a.id = #{id}
+  </map>
+  <map id="getProjectUserRelationList">
+    select
+    a.id as id,
+    a.projectId as projectId,
+    a.userId as userId,
+    a.type as type,
+    b.nickName as nickName,
+    b.loginName as loginName,
+    a.createTime as createTime from ProjectUserRelation a, User b
+    where a.projectId = #{id} and a.status = 0 and b.status = 0 and a.userId = b.id
+  </map>
+  <map id="updateProjectUserRelation">
+    update ProjectUserRelation
+    <set>
+      modifyTime = #{modifyTime}
+      <if test="@notEmpty(this.status)">
+        , status = #{status}
+      </if>
+      <if test="@notEmpty(this.type)">
+        , type = #{type}
+      </if>
+    </set>
+    <where>
+      id = #{id}
+    </where>
+  </map>
+  <map id="getProjectOwnerRelationId">
+    select 
+    id from ProjectUserRelation
+    where type = 1 and projectId = #{projectId}
   </map>
 </root>
