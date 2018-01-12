@@ -1,18 +1,19 @@
 const router = require('koa-router')();
 
 const {
-  getUser,
+  getInfo,
   addUser,
   resetPwd,
   getUserList,
   setStatus,
   checkLoginNameUnique,
   getUserOptions,
+  login,
 } = require('../controllers/user.controller');
 
 router.prefix('/user');
 
-router.get('/getUser', getUser);
+router.post('/getInfo', getInfo);
 
 router.post('/addUser', addUser);
 
@@ -25,5 +26,7 @@ router.post('/setStatus', setStatus);
 router.post('/checkLoginNameUnique', checkLoginNameUnique);
 
 router.post('/getUserOptions', getUserOptions);
+
+router.post('/login', login);
 
 module.exports = router;

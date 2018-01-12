@@ -6,13 +6,14 @@ const { formatDate, formatPage } = require('../utils/littleUtils');
 
 exports.addProject = async (ctx) => {
   const { body } = ctx.request;
+  const { userId } = ctx;
   const now = formatDate(new Date());
   const project = Object.assign({}, body, {
     createTime: now,
     modifyTime: now,
-    creatorId: 10034,
-    ownerId: 10034,
-    updaterId: 10034,
+    creatorId: userId,
+    ownerId: userId,
+    updaterId: userId,
   });
   try {
     const res = await ProjectDao.addProject(project);
@@ -27,13 +28,20 @@ exports.addProject = async (ctx) => {
 
 exports.getProjectList = async (ctx) => {
   const {
-    pageNum, pageSize, filter, ownerId, userId,
+    pageNum, pageSize, filter, ownerId,
   } = ctx.request.body;
+  let { userId } = ctx;
+  let type;
+  if (userId === 10000) {
+    userId = undefined;
+    type = 1;
+  }
   const page = formatPage(pageNum, pageSize);
   const project = Object.assign({}, {
     userId,
     ownerId,
     filter,
+    type,
   }, page);
   try {
     const res = await ProjectDao.getProjectList(project);

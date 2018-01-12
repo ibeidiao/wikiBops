@@ -1,40 +1,22 @@
 
-// const DepartmentDao = require('../daos/department.dao');
+const needAdminAuth = require('./needAdminAuth');
+const needLoginAuth = require('./needLoginAuth');
 
 function commonAuth() {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(true);
-    }, 1000);
-  });
-}
-
-function specialAuth() {
-  // ctx.body = {
-  //   message: 'specialAuth权限不足',
-  // };
   return true;
 }
 
-// function isExistAuth(ctx) {
-//   return new Promise(async (resolve) => {
-//     const content = await DepartmentDao.getDepartment({ id: 10000 });
-//     if (content.length && content.length > 0) {
-//       resolve(true);
-//     } else {
-//       ctx.body = {
-//         message: 'isExistAuth权限不足',
-//       };
-//       resolve(false);
-//     }
-//   });
-// }
+function specialAuth() {
+  return true;
+}
+
 
 const cache = {};
 
 const authUrls = [
   { reg: /.*/, needAuth: [commonAuth] },
-  { reg: /\/api\//, needAuth: [commonAuth, specialAuth] },
+  { reg: /\/api\//, exclude: /\/api\/user\/login/, needAuth: [commonAuth, specialAuth, needLoginAuth] },
+  { reg: /\/api\/user\/[(addUser)|(resetPwd)|(setStatus)]/, needAuth: [needAdminAuth, needLoginAuth] },
 ];
 
 /**
@@ -55,7 +37,7 @@ function removeDuplicate(array) {
 function getNeedAuth(path) {
   if (cache[path]) { return cache[path]; }
   const needAuth = authUrls.reduce((arr, curr) => {
-    if (new RegExp(curr.reg, 'i').test(path)) { return [...arr, ...curr.needAuth]; }
+    if (new RegExp(curr.reg, 'i').test(path) && !(curr.exclude && new RegExp(curr.exclude, 'i').test(path))) { return [...arr, ...curr.needAuth]; }
     return arr;
   }, []);
   cache[path] = removeDuplicate(needAuth);

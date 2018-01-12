@@ -1,0 +1,23 @@
+<root>
+  <map id="deleteUserToken">
+    delete from UserToken
+    <where>
+      1 = 1
+      <if test="@notEmpty(this.userId)">
+        and userId = #{userId}
+      </if>
+      <if test="@notEmpty(this.appName)">
+        and appName = #{appName}
+      </if>
+    </where>
+  </map>
+  <map id="addUserToken">
+    insert into UserToken 
+    (userId, token, createTime, modifyTime) 
+      values 
+    (#{userId}, #{token}, #{createTime}, #{modifyTime})
+  </map>
+  <map id="getOne">
+    select * from UserToken where userId = #{userId}
+  </map>
+</root>

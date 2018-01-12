@@ -29,8 +29,6 @@ const addProject = async (project) => {
     await connection.rollback();
     return e;
   } 
-  
-  return await connection.query(sql);
 }
 
 const getProjectList = async (project) => {
@@ -39,7 +37,6 @@ const getProjectList = async (project) => {
 
   const res1 = await connection.query(sql1);
   const res2 = await connection.query(sql2);
-
   return Object.assign({}, { list: res1 }, res2[0]);
 }
 
@@ -98,7 +95,7 @@ const makeOverProject = async (relation) => {
 
 const updateProject = async (project) => {
   const sql = projectMapper('updateProject', project);
-  
+
   return await connection.query(sql);
 }
 

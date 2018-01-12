@@ -6,7 +6,7 @@ const bodyparser = require('koa-bodyparser');
 const logger = require('koa-logger');
 const cors = require('koa2-cors');
 
-const auth = require('./utils/auth');
+const auth = require('./auth/auth');
 const logUtil = require('./utils/logUtil');
 
 const apiRouter = require('./routes/api');
@@ -29,8 +29,9 @@ app.use(views(`${__dirname}/views`, {
 }));
 
 app.use(cors({
-  origin() {
-    return '*';
+  credentials: true,
+  origin(ctx) {
+    return ctx.header.origin;
   },
   allowMethods: ['GET', 'POST', 'DELETE', 'OPTIONS', 'PUT'],
 }));
@@ -70,6 +71,24 @@ app.use(async (ctx, next) => {
     ms = new Date() - start;
     // 记录异常日志
     logUtil.logError(ctx, error, ms);
+  }
+});
+
+// 解析cookie token信息。
+app.use(async (ctx, next) => {
+  try {
+    const token = ctx.cookies.get('token');
+    if (token) {
+      const user = JSON.parse(Buffer.from(decodeURIComponent(token), 'base64').toString());
+      ctx.token = user.token;
+      ctx.role = user.role;
+      ctx.userId = user.userId;
+    }
+    await next();
+  } catch (err) {
+    ctx.body = {
+      err,
+    };
   }
 });
 

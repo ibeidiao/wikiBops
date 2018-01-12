@@ -5,6 +5,30 @@
       values 
     (#{loginName},#{password},#{nickName},#{createTime}, #{modifyTime}, #{creatorId})
   </map>
+  <map id="getUser">
+    select id, loginName, nickName, password, role, email, mobile, status from User 
+    <where>
+      1 = 1
+      <if test="@notEmpty(this.loginName)">
+        and loginName = #{loginName}
+      </if>
+      <if test="@notEmpty(this.id)">
+        and id = #{id}
+      </if>
+    </where>
+  </map>
+  <map id="getInfo">
+    select id, loginName, nickName, role, email, mobile from User 
+    <where>
+      1 = 1
+      <if test="@notEmpty(this.loginName)">
+        and loginName = #{loginName}
+      </if>
+      <if test="@notEmpty(this.id)">
+        and id = #{id}
+      </if>
+    </where>
+  </map>
   <map id="getUserList">
     select 
     a.id, 
@@ -20,7 +44,7 @@
     a.creatorId as creatorId,
     b.nickName as creatorName from wiki.User a, wiki.User b 
     <where>
-      a.creatorId = b.id
+      a.creatorId = b.id and a.id != 10000
       <if test="@notEmpty(this.filter)">
         and (a.loginName = #{filter} or a.nickName = #{filter} or a.email = #{filter} or a.mobile = #{filter})
       </if>
@@ -39,7 +63,7 @@
   <map id="getUserList-C">
     select count(*) as count from wiki.User a, wiki.User b 
     <where>
-      a.creatorId = b.id
+      a.creatorId = b.id and a.id != 10000
       <if test="@notEmpty(this.filter)">
         and (a.loginName = #{filter} or a.nickName = #{filter} or a.email = #{filter} or a.mobile = #{filter})
       </if>

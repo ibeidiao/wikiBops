@@ -13,7 +13,7 @@
   </map>
   <map id="getProjectList">
     select 
-    a.id, 
+    a.id as id, 
     a.name as name, 
     a.description as description, 
     a.creatorId as creatorId, 
@@ -25,12 +25,18 @@
     a.modifyTime as modifyTime,
     b.type as type from Project a, ProjectUserRelation b, User c, User d
     <where>
-      b.projectId = a.id and c.id = a.ownerId and d.id = a.updaterId and b.userId = #{userId}
+      b.projectId = a.id and c.id = a.ownerId and d.id = a.updaterId and b.status = 0
+      <if test="@notEmpty(this.userId)">
+        and b.userId = #{userId}
+      </if>
       <if test="@notEmpty(this.filter)">
         and (a.name = #{filter} or c.nickName = #{filter})
       </if>
       <if test="@notEmpty(this.ownerId)">
         and a.ownerId = #{ownerId}
+      </if>
+      <if test="@notEmpty(this.type)">
+        and b.type = #{type}
       </if>
     </where>
     limit #{offset},#{pageSize}
@@ -38,12 +44,18 @@
   <map id="getProjectList-C">
     select count(*) as count from Project a, ProjectUserRelation b, User c, User d
     <where>
-      b.projectId = a.id and c.id = a.ownerId and d.id = a.updaterId and b.userId = #{userId}
+      b.projectId = a.id and c.id = a.ownerId and d.id = a.updaterId and b.status = 0
+      <if test="@notEmpty(this.userId)">
+        and b.userId = #{userId}
+      </if>
       <if test="@notEmpty(this.filter)">
         and (a.name = #{filter} or c.nickName = #{filter})
       </if>
       <if test="@notEmpty(this.ownerId)">
         and a.ownerId = #{ownerId}
+      </if>
+      <if test="@notEmpty(this.type)">
+        and b.type = #{type}
       </if>
     </where>
   </map>
