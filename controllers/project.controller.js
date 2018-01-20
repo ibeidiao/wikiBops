@@ -4,6 +4,19 @@ const ResponseBody = require('../models/ResponseBody');
 
 const { formatDate, formatPage } = require('../utils/littleUtils');
 
+
+async function isOwnProject({ projectId, userId }) {
+  try {
+    const res = ProjectDao.getOneRelation({ projectId, userId });
+    if (res.length && res[0].type === 1) {
+      return true;
+    }
+    return false;
+  } catch (err) {
+    return err;
+  }
+}
+
 exports.addProject = async (ctx) => {
   const { body } = ctx.request;
   const { userId } = ctx;
@@ -91,9 +104,14 @@ exports.addProjectUserRelation = async (ctx) => {
     modifyTime: now,
   };
   try {
-    const res = await ProjectDao.addProjectUserRelation(relation);
-    const resBody = new ResponseBody({ insertId: res.insertId }, '添加成员成功');
-    ctx.body = resBody;
+    if (await isOwnProject({ projectId, userId: ctx.userId })) {
+      const res = await ProjectDao.addProjectUserRelation(relation);
+      const resBody = new ResponseBody({ insertId: res.insertId }, '添加成员成功');
+      ctx.body = resBody;
+    } else {
+      const resBody = new ResponseBody({}, '没有权限修改项目', 10);
+      ctx.body = resBody;
+    }
   } catch (err) {
     ctx.body = {
       err,
@@ -102,7 +120,7 @@ exports.addProjectUserRelation = async (ctx) => {
 };
 
 exports.removeProjectUserRelation = async (ctx) => {
-  const { id } = ctx.request.body;
+  const { id, projectId } = ctx.request.body;
   const now = formatDate(new Date());
   const relation = {
     id,
@@ -110,9 +128,14 @@ exports.removeProjectUserRelation = async (ctx) => {
     modifyTime: now,
   };
   try {
-    await ProjectDao.updateProjectUserRelation(relation);
-    const resBody = new ResponseBody({}, '删除成员成功');
-    ctx.body = resBody;
+    if (await isOwnProject({ projectId, userId: ctx.userId })) {
+      await ProjectDao.updateProjectUserRelation(relation);
+      const resBody = new ResponseBody({}, '删除成员成功');
+      ctx.body = resBody;
+    } else {
+      const resBody = new ResponseBody({}, '没有权限修改项目', 10);
+      ctx.body = resBody;
+    }
   } catch (err) {
     ctx.body = {
       err,
@@ -130,9 +153,14 @@ exports.makeOverProject = async (ctx) => {
     type: 1,
   };
   try {
-    await ProjectDao.makeOverProject(relation);
-    const resBody = new ResponseBody({}, '项目转让成功');
-    ctx.body = resBody;
+    if (await isOwnProject({ projectId, userId: ctx.userId })) {
+      await ProjectDao.makeOverProject(relation);
+      const resBody = new ResponseBody({}, '项目转让成功');
+      ctx.body = resBody;
+    } else {
+      const resBody = new ResponseBody({}, '没有权限修改项目', 10);
+      ctx.body = resBody;
+    }
   } catch (err) {
     ctx.body = {
       err,
@@ -145,9 +173,14 @@ exports.setStatus = async (ctx) => {
   const now = formatDate(new Date());
   const project = { status, id, modifyTime: now };
   try {
-    await ProjectDao.updateProject(project);
-    const resBody = new ResponseBody({}, '设置项目状态成功');
-    ctx.body = resBody;
+    if (await isOwnProject({ projectId: id, userId: ctx.userId })) {
+      await ProjectDao.updateProject(project);
+      const resBody = new ResponseBody({}, '设置项目状态成功');
+      ctx.body = resBody;
+    } else {
+      const resBody = new ResponseBody({}, '没有权限修改项目', 10);
+      ctx.body = resBody;
+    }
   } catch (err) {
     ctx.body = {
       err,
@@ -162,12 +195,18 @@ exports.editProject = async (ctx) => {
     id, name, description, modifyTime: now,
   };
   try {
-    await ProjectDao.updateProject(project);
-    const resBody = new ResponseBody({}, '更新项目状态成功');
-    ctx.body = resBody;
+    if (await isOwnProject({ projectId: id, userId: ctx.userId })) {
+      await ProjectDao.updateProject(project);
+      const resBody = new ResponseBody({}, '更新项目状态成功');
+      ctx.body = resBody;
+    } else {
+      const resBody = new ResponseBody({}, '没有权限修改项目', 10);
+      ctx.body = resBody;
+    }
   } catch (err) {
     ctx.body = {
       err,
     };
   }
 };
+

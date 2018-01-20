@@ -73,6 +73,12 @@ const getProjectInfo = async (project) => {
 
 }
 
+const getOneRelation = async (relation) => {
+  const sql = projectMapper('getProjectUserRelation', relation);
+
+  return await connection.query(sql);
+}
+
 const addProjectUserRelation = async (relation) => {
   const sql = projectMapper('addProjectUserRelation', relation);
 
@@ -121,4 +127,5 @@ module.exports = {
   makeOverProject,
   updateProject,
   getProjectInfo,
+  getOneRelation,
 }

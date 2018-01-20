@@ -91,6 +91,15 @@
     a.status as status from Project a, User b, User c
     where a.creatorId = b.id and a.ownerId = c.id and a.id = #{id}
   </map>
+  <map id="getProjectUserRelation">
+    select
+    id as id,
+    projectId as projectId,
+    userId as userId,
+    type as type,
+    createTime as createTime from ProjectUserRelation
+    where projectId = #{projectId} and userId = #{userId} and status = 0
+  </map>
   <map id="getProjectUserRelationList">
     select
     a.id as id,
