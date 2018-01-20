@@ -9,7 +9,7 @@ const {
   makeOverProject,
   setStatus,
   editProject,
-  getProjectInfo
+  getProjectInfo,
 } = require('../controllers/project.controller');
 
 router.prefix('/project');

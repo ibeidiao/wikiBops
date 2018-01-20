@@ -68,7 +68,7 @@ exports.getProjectDetail = async (ctx) => {
 };
 
 exports.getProjectInfo = async (ctx) => {
-  const { id }  = ctx.request.body;
+  const { id } = ctx.request.body;
   try {
     const res = await ProjectDao.getProjectInfo({ id });
     const resBody = new ResponseBody(res, '获取项目基本信息成功');
