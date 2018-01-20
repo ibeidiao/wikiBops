@@ -2,20 +2,20 @@
 const needAdminAuth = require('./needAdminAuth');
 const needLoginAuth = require('./needLoginAuth');
 
-function commonAuth() {
-  return true;
-}
+// function commonAuth() {
+//   return true;
+// }
 
-function specialAuth() {
-  return true;
-}
+// function specialAuth() {
+//   return true;
+// }
 
 
 const cache = {};
 
 const authUrls = [
-  { reg: /.*/, needAuth: [commonAuth] },
-  { reg: /\/api\//, exclude: /\/api\/user\/login/, needAuth: [commonAuth, specialAuth, needLoginAuth] },
+  { reg: /.*/, needAuth: [] }, // commonAuth
+  { reg: /\/api\//, exclude: /\/api\/user\/login/, needAuth: [needLoginAuth] }, // commonAuth, specialAuth, 
   { reg: /\/api\/user\/[(addUser)|(resetPwd)|(setStatus)]/, needAuth: [needAdminAuth, needLoginAuth] },
 ];
 

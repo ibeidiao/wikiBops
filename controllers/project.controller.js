@@ -67,6 +67,19 @@ exports.getProjectDetail = async (ctx) => {
   }
 };
 
+exports.getProjectInfo = async (ctx) => {
+  const { id }  = ctx.request.body;
+  try {
+    const res = await ProjectDao.getProjectInfo({ id });
+    const resBody = new ResponseBody(res, '获取项目基本信息成功');
+    ctx.body = resBody;
+  } catch (err) {
+    ctx.body = {
+      err,
+    };
+  }
+};
+
 exports.addProjectUserRelation = async (ctx) => {
   const { projectId, userId, type } = ctx.request.body;
   const now = formatDate(new Date());
